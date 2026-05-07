@@ -82,16 +82,15 @@ public class HttpRequestHandler {
   }
 
   private HttpResponse<String> delete(String path) {
+  Notification notif = find(path);
 
-    Notification notif = find(path);
+  if (notif == null || notif.isDeleted()) {
+    return new HttpResponse<>(HttpStatus.NOT_FOUND, "Notification not found");
+  }
 
-    if(notif == null || notif.isDeleted()) {
-      return new HttpResponse<>(HttpStatus.NOT_FOUND, "Notification not found");
-    }
+  notif.setDeleted(true);
 
-    notif.setDeleted(true);
-
-    return new HttpResponse<>(HttpStatus.NO_CONTENT, null);
+  return new HttpResponse<>(HttpStatus.NO_CONTENT, null);
 
   }
 
